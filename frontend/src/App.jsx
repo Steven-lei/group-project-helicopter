@@ -12,7 +12,15 @@ function App() {
       <section id="center">
         <ul>
           <li> init project</li>
-          <li>init CI/CD</li>
+          <li>
+            <b>Backend:</b> <a href="https://cs732-groupproj.fly.dev">Link</a>
+          </li>
+          <li>
+            <b>Frontend:</b>
+            <a href="https://uoa-cs732-s1-2026.github.io/group-project-helicopter/">
+              Link
+            </a>
+          </li>
         </ul>
       </section>
     </>
