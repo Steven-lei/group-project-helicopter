@@ -4,13 +4,14 @@ import cors from "cors";
 import { initFireBase } from "../configs/firebase.js";
 import router from "./routes/routes.js";
 import chalk from "chalk";
-
+import { whitelist } from "../configs/whiltelist.js";
 dotenv.config();
 const PORT = process.env.PORT ?? 3000;
 
 initFireBase();
 var app = express();
 
+console.log("cors allowing from", whitelist);
 const corsOption = {
   origin: function (origin, callback) {
     if (!origin || whitelist.indexOf(origin) !== -1) {

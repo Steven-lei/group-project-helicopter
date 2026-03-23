@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "nodemon ./src/app.js",
     "start": "node ./src/app.js",
+    "db-test": "node ./src/db/db-test.js",
     "author": ""
   },
   "dependencies": {
@@ -15,6 +16,7 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "firebase-admin": "^13.7.0",
+    "mysql2": "^3.20.0",
     "nodemon": "^3.1.14",
     "routes": "^2.1.0"
   }

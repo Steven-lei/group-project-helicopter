@@ -79,6 +79,7 @@ const dishes = [
 //router.get("/", authMiddleware, (req, res) => res.json(dishes));
 //router.get("/:id", authMiddleware, (req, res) => {
 router.get("/", (req, res) => res.json(dishes));
+
 router.get("/:id", (req, res) => {
   const { id } = req.params;
 

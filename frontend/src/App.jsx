@@ -1,12 +1,10 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
 import "./App.css";
+import { useQueryDishes } from "./hooks/useQueryDishes";
+import Dish from "./components/Dish";
 
 function App() {
-  const [count, setCount] = useState(0);
-
+  const { data: dishes } = useQueryDishes();
   return (
     <>
       <section id="center">
@@ -25,6 +23,17 @@ function App() {
             If you see this message without manually deployment, CI/CD is
             working
           </li>
+        </ul>
+        <ul>
+          {dishes.map((dishType, index) => (
+            <div key={index}>
+              <h5>{dishType.name}</h5>
+              <p>{dishType.style}</p>
+              {dishType.dishes.map((dish) => (
+                <Dish key={dish.id} id={dish.id}></Dish>
+              ))}
+            </div>
+          ))}
         </ul>
       </section>
     </>
