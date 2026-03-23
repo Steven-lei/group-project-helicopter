@@ -19,6 +19,7 @@ curl -L https://fly.io/install.sh | sh
 
 ## Add Dockerfile for containization
 
+# for command test
 FROM node:22-alpine
 WORKDIR /app
 COPY package\*.json ./
