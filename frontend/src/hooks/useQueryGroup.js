@@ -8,7 +8,7 @@ export function useQueryGroup() {
     queryKey: ["group"],
     queryFn: async () => {
       const url = `${BACKEND_BASE_URL}/api/group/`;
-      console.log(url);
+      console.log("bacend", url);
       const response = await fetch(url);
       if (!response.ok)
         throw new Error(`Error fecthing data: ${response.status}`);
