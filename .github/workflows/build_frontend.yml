@@ -29,12 +29,7 @@ jobs:
         run: npm install
 
       - name: Build project
-        run: |
-          echo "--- DEBUG START ---"
-          echo "Checking if variable is set in Shell..."
-          if [ -z "$VITE_BACKEND_BASE_URL" ]; then echo "VITE_BACKEND_BASE_URL is EMPTY"; else echo "VITE_BACKEND_BASE_URL is SET (Value is masked)"; fi
-          echo "--- DEBUG END ---"
-          npm run build
+        run: npm run build
         env:
           VITE_BACKEND_BASE_URL: ${{ secrets.VITE_BACKEND_BASE_URL }}
       - name: Setup Pages

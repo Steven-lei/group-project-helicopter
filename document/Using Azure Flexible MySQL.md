@@ -26,8 +26,10 @@ Settings -> Networking->Download SSL Certificate
 
 Configure the database connection string in .dev like:
 
+```js
 DATABASE_URL=mysql://user:password@endpoint:port/cs732db
 DB_SSL_CA_PATH=./cert/DigiCertGlobalRootG2.crt.pem
+```
 
 We don't relly need to protect the certificate as it is a public certificate and everyone can download from Azure
 
