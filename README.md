@@ -1,58 +1,146 @@
-# CS732 project - Team Helicopter
+# MoodPal Full New Code
 
-Welcome to the CS732 project. We look forward to seeing the amazing things you create this semester! This is your team's repository.
+This package is a full refreshed version of the project with these backend response fields added and saved end to end:
 
-Your team members are:
+- `scriptScore`
+- `textScore`
+- `audioScore`
+- `facialScore`
+- `videoScore`
+- `finalScore`
+- `modalityScores`
+- `modalityConfidences`
+- `modalityWeights`
+- `aiFeedback`
 
-- Shuxuan Huang _(shua772@aucklanduni.ac.nz)_
-- Steven Lei _(zlei209@aucklanduni.ac.nz)_
-- Haonan Luo _(hluo852@aucklanduni.ac.nz)_
-- Ruizhu Yang _(ryan270@aucklanduni.ac.nz)_
-- Pengfei Ye _(pye655@aucklanduni.ac.nz)_
-- Ling Fan _(lfan142@aucklanduni.ac.nz)_
+The frontend still keeps the simplified sentiment display:
 
-You have complete control over how you run this repo. All your members will have admin access. The only thing setup by default is branch protections on `main`, requiring a PR with at least one code reviewer to modify `main` rather than direct pushes.
+- Transcript
+- Mood Score
+- Mood Label
+- AI Feedback
 
-Please use good version control practices, such as feature branching, both to make it easier for markers to see your group's history and to lower the chances of you tripping over each other during development
+So the UI stays clean, but the backend now returns the full modality breakdown for debugging, charts, or future UI expansion.
 
-![](./Helicopter.png)
+## Stack
 
----
+- Frontend: React + Vite
+- Backend: Node.js + Express + MongoDB
+- AI service: Python + FastAPI
+- MongoDB via Docker Compose
 
-## 📂 Directories
+## Ports
 
-- **frontend**: contains code for React
-- **backend**: contains code for nodejs
-- **documents**: contains all documents
+- Frontend: `5173`
+- Backend: `5001`
+- AI service: `8000`
+- MongoDB: `27017`
 
----
+## Startup
 
-## 🛠️ Getting Started
+### 1. Start MongoDB
 
-### 1. Installation
-
-Clone the repository and install the necessary dependencies from the project root
-
-```sh
-npm install
+```bash
+cd moodpal-full-new-code
+docker compose up -d
 ```
 
-### 2. Running the project
+### 2. Start the Python AI service
 
-Run the backend as well as the frontend
+```bash
+cd moodpal-full-new-code/ai-service-python
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
 
-```sh
+Health check:
+
+```bash
+curl http://localhost:8000/health
+```
+
+### 3. Start the backend
+
+```bash
+cd moodpal-full-new-code/backend-node
+cp .env.example .env
+npm install
 npm run dev
 ```
 
-Run the backend only
+Health check:
 
-```sh
-npm run dev:backend
+```bash
+curl http://localhost:5001/api/health
 ```
 
-Run the frontend only
+### 4. Seed the database
 
-```sh
-npm run dev:frontend
+```bash
+cd moodpal-full-new-code/backend-node
+npm run seed
 ```
+
+### 5. Start the frontend
+
+```bash
+cd moodpal-full-new-code/frontend-react
+cp .env.example .env
+npm install
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:5173
+```
+
+## Important API result fields
+
+The main analyze response now includes:
+
+```json
+{
+  "scriptScore": 54.2,
+  "textScore": 54.2,
+  "audioScore": 41.8,
+  "facialScore": 43.6,
+  "videoScore": 43.6,
+  "finalScore": 46.3,
+  "sentimentScore": 46.3,
+  "sentimentLabel": "neutral",
+  "confidence": 0.74,
+  "aiFeedback": "Your mood seems mixed right now, with some cues appearing more positive than others.",
+  "modalityScores": {
+    "script": 54.2,
+    "text": 54.2,
+    "audio": 41.8,
+    "facial": 43.6,
+    "video": 43.6,
+    "final": 46.3
+  }
+}
+```
+
+## MongoDB config
+
+Edit:
+
+`backend-node/.env`
+
+```env
+MONGODB_URI=mongodb://localhost:27017/moodpal
+AI_SERVICE_URL=http://localhost:8000
+CLIENT_ORIGIN=http://localhost:5173
+UPLOAD_DIR=./uploads
+YOUTUBE_API_KEY=
+```
+
+## Notes
+
+- Browser transcript works best in Chrome or Edge.
+- If transcript capture is empty, the backend still returns script/text scores based on topic fallback plus other modalities.
+- The backend stores all modality scores in `analysis_results`.
