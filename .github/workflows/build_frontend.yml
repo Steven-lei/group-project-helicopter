@@ -1,7 +1,7 @@
 name: Deploy Frontend
 on:
   push:
-    branches: [main] # only on main branch
+    branches: [steven] # only on main branch
     paths: ["frontend-react/**"]
   workflow_dispatch:
 permissions:
