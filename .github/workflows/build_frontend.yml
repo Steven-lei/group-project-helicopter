@@ -2,7 +2,7 @@ name: Deploy Frontend
 on:
   push:
     branches: [main] # only on main branch
-    paths: ["frontend/**"]
+    paths: ["frontend-react/**"]
   workflow_dispatch:
 permissions:
   contents: read # allow read
@@ -14,7 +14,7 @@ jobs:
     environment: github-pages
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: ./frontend-react
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

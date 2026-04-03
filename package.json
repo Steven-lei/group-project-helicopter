@@ -1,0 +1,19 @@
+{
+  "name": "cs732-group-project-helicopter",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "ai-service-python",
+    "backend-node",
+    "frontend-react"
+  ],
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "scripts": {
+    "dev": "concurrently -c \"cyan.bold,magenta.bold\" \"npm:dev:frontend\" \"npm:dev:backend\"",
+    "dev:backend": "npm run dev --workspace backend-node",
+    "dev:frontend": "npm run dev --workspace frontend-react",
+    "dev:initdb": "npm run seed --workspace backend-node"
+  }
+}

@@ -2,7 +2,7 @@ name: Deploy Backend
 on:
   push:
     branches: [main] # only on main branch
-    paths: ["backend/**"]
+    paths: ["backend-node/**"]
 jobs:
   deploy-backend:
     runs-on: ubuntu-latest
@@ -17,6 +17,6 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy to Fly.io
         run: flyctl deploy --remote-only
-        working-directory: ./backend
+        working-directory: ./backend-node
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
