@@ -11,4 +11,4 @@ node_modules
 !.env.test
 
 # Videos
-backend-node/uploads
+**/uploads/
