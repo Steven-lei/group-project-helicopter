@@ -1,0 +1,41 @@
+.pixel-pet {
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+
+.pixel-pet--empty {
+  display: inline-block;
+  width: 1px;
+  height: 1px;
+  min-width: calc(32px * var(--pet-scale, 4));
+  min-height: calc(32px * var(--pet-scale, 4));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pixel-pet__scale {
+  display: inline-block;
+  transform: scale(var(--pet-scale, 4));
+  transform-origin: center bottom;
+}
+
+.pixel-pet__hover {
+  display: inline-block;
+  transition: transform 0.22s ease-out;
+  transform-origin: center bottom;
+}
+
+.pixel-pet:hover .pixel-pet__hover {
+  transform: scale(1.06);
+}
+
+.pixel-pet__img {
+  display: block;
+  max-width: none;
+  height: auto;
+  vertical-align: bottom;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+}

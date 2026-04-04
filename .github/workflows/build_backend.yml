@@ -1,7 +1,7 @@
 name: Deploy Backend
 on:
   push:
-    branches: [steven] # only on main branch
+    branches: [main] # only on main branch
     paths: ["backend-node/**"]
 jobs:
   deploy-backend:
