@@ -8,8 +8,8 @@ RUN npm install --omit=dev
 
 COPY . .
 
-ENV PORT=3000
+ENV PORT=5001
 
 EXPOSE $PORT
 
-CMD ["node", "--max-old-space-size=200", "src/app.js"]
+CMD ["node", "--max-old-space-size=200", "src/server.js"]

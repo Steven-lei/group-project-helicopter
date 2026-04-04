@@ -11,9 +11,10 @@
     "concurrently": "^9.2.1"
   },
   "scripts": {
-    "dev": "concurrently -c \"cyan.bold,magenta.bold\" \"npm:dev:frontend\" \"npm:dev:backend\"",
+    "dev": "concurrently -c \"cyan.bold,magenta.bold,green.bold\" \"npm:dev:frontend\" \"npm:dev:backend\" \"npm:dev:ai\"",
+    "dev:ai": "cd ai-service-python && bash start.sh",
     "dev:backend": "npm run dev --workspace backend-node",
     "dev:frontend": "npm run dev --workspace frontend-react",
-    "dev:initdb": "npm run seed --workspace backend-node"
+    "dev:initdb": "npm run initdb --workspace backend-node"
   }
 }
