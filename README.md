@@ -48,7 +48,7 @@ docker compose up -d
 ### 2. Start the Python AI service
 
 ```bash
-cd moodpal-full-new-code/ai-service-python
+cd ai-service-python
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt

@@ -1,8 +1,8 @@
 import { Router } from "express";
-import healthRoutes from "./health.routes.js";
+import healthRoutes from "./api-health.js";
 import topicRoutes from "./api-topic.js";
-import sessionRoutes from "./session.routes.js";
-import analyzeRoutes from "./analyze.routes.js";
+import sessionRoutes from "./api-session.js";
+import analyzeRoutes from "./api-analyze.js";
 import userRoutes from "./api-user.js";
 const router = Router();
 
