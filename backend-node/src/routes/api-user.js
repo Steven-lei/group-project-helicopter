@@ -41,13 +41,35 @@ router.post("/", async (req, res) => {
   await user.save();
   return ok(res, user, 201);
 });
-/**
- * GET /api/user
- * Optional query parameters:
- * - userid: string (filter by user ID)
- *
- * Returns a list of users with .
- */
+router.patch("/:userid", async (req, res) => {
+  const { userid } = req.params;
+  validateIds(userid);
+  const { name, preferredLanguage } = req.body;
+
+  const updatedUser = await User.findByIdAndUpdate(
+    userid,
+    { name, preferredLanguage },
+    { new: true, runValidators: true },
+  ).lean();
+  if (!updatedUser) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+    throw error;
+  }
+  return ok(res, updatedUser);
+});
+router.delete("/:userid", async (req, res) => {
+  const { userid } = req.params;
+  validateIds(userid);
+  const deletedUser = await User.findByIdAndDelete(userid).lean();
+  if (!deletedUser) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+    throw error;
+  }
+  return ok(res, { message: "User successfully deleted" });
+});
+
 router.get("/:userid", async (req, res) => {
   const { userid } = req.params;
   validateIds(userid);

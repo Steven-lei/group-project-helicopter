@@ -1,0 +1,800 @@
+{
+  "info": {
+    "_postman_id": "fe850a95-7d81-46df-a066-5ad1d6784891",
+    "name": "moodpal",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50540301"
+  },
+  "item": [
+    {
+      "name": "Healthy",
+      "item": [
+        {
+          "name": "API Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\",function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "const response = pm.response.json();\r",
+                  "console.log(response.success);\r",
+                  "pm.test(\"Success is returned\",()=>{\r",
+                  "    pm.expect(response.success).to.eql(true)\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/health",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "CreateUser",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 201\",function(){\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "})\r",
+                  "const response = pm.response.json();\r",
+                  "const retdata = response.data;\r",
+                  "pm.test(\"Success is returned\",()=>{\r",
+                  "    pm.expect(response.success).to.eql(true)\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"User created\", () => {\r",
+                  "    pm.expect(response.data).to.be.an('object', 'Response data should be an object');\r",
+                  "    const user = response.data;\r",
+                  "    console.log(user);\r",
+                  "    pm.expect(user).to.have.property('email');\r",
+                  "    pm.expect(user).to.have.property('_id');\r",
+                  "    pm.expect(user).to.have.property('role');\r",
+                  "    pm.expect(user.role).to.eql(\"user\");\r",
+                  "    pm.expect(user.preferredLanguage).to.eql(\"en\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.globals.set(\"userid\",response.data._id)\r",
+                  "pm.globals.set(\"email\",response.data.email)"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"name\": \"{{$randomFullName}}\",\r\n  \"preferredLanguage\": \"en\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/:userid/pets",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":userid",
+                "pets"
+              ],
+              "variable": [
+                {
+                  "key": "userid",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetUserByEmail",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\",function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "const retdata = response.data;\r",
+                  "pm.test(\"Success is returned\",()=>{\r",
+                  "    pm.expect(response.success).to.eql(true)\r",
+                  "})\r",
+                  "const expectedEmail = pm.variables.get(\"email\");\r",
+                  "const expectedID = pm.variables.get(\"userid\");\r",
+                  "\r",
+                  "pm.test(\"User list should contain exactly one matching user\", () => {\r",
+                  "    pm.expect(response.data).to.be.an('array', 'Response data should be an array');\r",
+                  "    pm.expect(response.data.length).to.eql(1, 'Expected exactly one user in the array');\r",
+                  "    const user = response.data[0];\r",
+                  "    pm.expect(user).to.have.property('email');\r",
+                  "    pm.expect(user.email).to.eql(expectedEmail);\r",
+                  "    pm.expect(user).to.have.property('_id');\r",
+                  "    pm.expect(String(user._id)).to.eql(String(expectedID));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/?email={{email}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "{{email}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get a user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\",function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "const response = pm.response.json();\r",
+                  "const retdata = response.data;\r",
+                  "pm.test(\"Success is returned\",()=>{\r",
+                  "    pm.expect(response.success).to.eql(true)\r",
+                  "})\r",
+                  "const expectedEmail = pm.variables.get(\"email\");\r",
+                  "const expectedID = pm.variables.get(\"userid\");\r",
+                  "\r",
+                  "pm.test(\"User returned\", () => {\r",
+                  "    pm.expect(response.data).to.be.an('object', 'Response data should be an object');\r",
+                  "    const user = response.data;\r",
+                  "    console.log(user);\r",
+                  "    pm.expect(user).to.have.property('email');\r",
+                  "    pm.expect(user.email).to.eql(expectedEmail);\r",
+                  "    pm.expect(user).to.have.property('_id');\r",
+                  "    pm.expect(String(user._id)).to.eql(String(expectedID));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/:userid",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":userid"
+              ],
+              "variable": [
+                {
+                  "id": 0,
+                  "key": "userid",
+                  "value": "{{userid}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update a user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\",function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "const response = pm.response.json();\r",
+                  "const retdata = response.data;\r",
+                  "pm.test(\"Success is returned\",()=>{\r",
+                  "    pm.expect(response.success).to.eql(true)\r",
+                  "})\r",
+                  "const expectedEmail = pm.variables.get(\"email\");\r",
+                  "const expectedID = pm.variables.get(\"userid\");\r",
+                  "\r",
+                  "pm.test(\"User returned\", () => {\r",
+                  "    pm.expect(response.data).to.be.an('object', 'Response data should be an object');\r",
+                  "    const user = response.data;\r",
+                  "    console.log(user);\r",
+                  "    pm.expect(user).to.have.property('email');\r",
+                  "    pm.expect(user.email).to.eql(expectedEmail);\r",
+                  "    pm.expect(user).to.have.property('_id');\r",
+                  "    pm.expect(String(user._id)).to.eql(String(expectedID));\r",
+                  "    pm.expect(user).to.have.property('preferredLanguage');\r",
+                  "    pm.expect(String(user.preferredLanguage)).to.eql(String(\"cn\"));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{        \r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"preferredLanguage\": \"cn\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/:userid",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":userid"
+              ],
+              "variable": [
+                {
+                  "id": 0,
+                  "key": "userid",
+                  "value": "{{userid}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Adopt a Pet",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 201\",function(){\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "})\r",
+                  "const response = pm.response.json();\r",
+                  "const retdata = response.data;\r",
+                  "pm.test(\"Success is returned\",()=>{\r",
+                  "    pm.expect(response.success).to.eql(true)\r",
+                  "})\r",
+                  "\r",
+                  "const expectedUserID = pm.variables.get(\"userid\");\r",
+                  "\r",
+                  "pm.test(\"Pet created\", () => {\r",
+                  "    const pet = response.data;\r",
+                  "    console.log(pet);\r",
+                  "    pm.expect(pet).to.be.an('object', 'Response data should be an object');\r",
+                  "    pm.expect(pet).to.have.property('owner');\r",
+                  "    pm.expect(pet).to.have.property('petType');\r",
+                  "    pm.expect(String(pet.owner)).to.eql(String(expectedUserID));\r",
+                  "    pm.expect(String(pet.petType)).to.eql(\"Charmeleon\");\r",
+                  "    pm.expect(pet).to.have.property('_id');\r",
+                  "});\r",
+                  "\r",
+                  "pm.globals.set(\"petid\",response.data._id)"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"petType\": \"Charmeleon\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/:userid/pets",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":userid",
+                "pets"
+              ],
+              "variable": [
+                {
+                  "id": 0,
+                  "key": "userid",
+                  "value": "{{userid}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update a Pet",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\",function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "const response = pm.response.json();\r",
+                  "const retdata = response.data;\r",
+                  "pm.test(\"Success is returned\",()=>{\r",
+                  "    pm.expect(response.success).to.eql(true)\r",
+                  "})\r",
+                  "\r",
+                  "const expectedUserID = pm.variables.get(\"userid\");\r",
+                  "const expectedPetID = pm.variables.get(\"petid\");\r",
+                  "pm.test(\"Pet updated\", () => {\r",
+                  "    const pet = response.data;\r",
+                  "    console.log(pet);\r",
+                  "    pm.expect(pet).to.be.an('object', 'Response data should be an object');\r",
+                  "    pm.expect(pet).to.have.property('owner');\r",
+                  "    pm.expect(pet).to.have.property('petType');\r",
+                  "    pm.expect(pet).to.have.property('_id');\r",
+                  "    pm.expect(String(pet.owner)).to.eql(String(expectedUserID));\r",
+                  "    pm.expect(String(pet.petType)).to.eql(\"pockmon\");\r",
+                  "    pm.expect(String(pet._id)).to.eql(String(expectedPetID));\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"petType\": \"pockmon\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/:userid/pets/:petid",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":userid",
+                "pets",
+                ":petid"
+              ],
+              "variable": [
+                {
+                  "id": 0,
+                  "key": "userid",
+                  "value": "{{userid}}",
+                  "type": "string"
+                },
+                {
+                  "key": "petid",
+                  "value": "{{petid}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a Pet",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\",function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "const response = pm.response.json();\r",
+                  "const retdata = response.data;\r",
+                  "pm.test(\"Success is returned\",()=>{\r",
+                  "    pm.expect(response.success).to.eql(true)\r",
+                  "})\r",
+                  "\r",
+                  "\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/:userid/pets/:petid",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":userid",
+                "pets",
+                ":petid"
+              ],
+              "variable": [
+                {
+                  "id": 0,
+                  "key": "userid",
+                  "value": "{{userid}}",
+                  "type": "string"
+                },
+                {
+                  "key": "petid",
+                  "value": "{{petid}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetAllPets",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\",function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "const response = pm.response.json();\r",
+                  "const retdata = response.data;\r",
+                  "pm.test(\"Success is returned\",()=>{\r",
+                  "    pm.expect(response.success).to.eql(true)\r",
+                  "})\r",
+                  "\r",
+                  "const expectedUserID = pm.variables.get(\"userid\");\r",
+                  "const deletedPetID = pm.variables.get(\"petid\");\r",
+                  "\r",
+                  "pm.test(\"Pet list is returned and does not contain the deleted pet\", () => {\r",
+                  "    pm.expect(response.data).to.be.an('array', 'API must return an array in the data field');\r",
+                  "\r",
+                  "    if (response.data.length > 0) {\r",
+                  "        const foundPet = response.data.find(pet => String(pet._id) === String(deletedPetID));\r",
+                  "        pm.expect(foundPet).to.be.undefined;\r",
+                  "        console.log(`Verified: List exists, and Pet ID ${deletedPetID} is gone.`);\r",
+                  "    } else {\r",
+                  "        console.log(\"Verified: List is now empty.\");\r",
+                  "    }\r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/:userid/pets",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":userid",
+                "pets"
+              ],
+              "variable": [
+                {
+                  "id": 0,
+                  "key": "userid",
+                  "value": "{{userid}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetSessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/:userid/sessions",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":userid",
+                "sessions"
+              ],
+              "variable": [
+                {
+                  "id": 0,
+                  "key": "userid",
+                  "value": "69d08c9c0c22cacef7e0ae32",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\",function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "const response = pm.response.json();\r",
+                  "console.log(response.success);\r",
+                  "const retdata = response.data;\r",
+                  "pm.test(\"Success is returned\",()=>{\r",
+                  "    pm.expect(response.success).to.be.true\r",
+                  "})\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/:userid",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":userid"
+              ],
+              "variable": [
+                {
+                  "id": 0,
+                  "key": "userid",
+                  "value": "{{userid}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Topics",
+      "item": [
+        {
+          "name": "Get all users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\",function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "})\r",
+                  "const response = pm.response.json();\r",
+                  "console.log(response.success);\r",
+                  "const retdata = response.data;\r",
+                  "pm.test(\"Success is returned\",()=>{\r",
+                  "    pm.expect(response.success).to.be.true\r",
+                  "})\r",
+                  "const expectedEmail = pm.variables.get(\"email\");\r",
+                  "const expectedID = pm.variables.get(\"userid\");\r",
+                  "console.log(expectedID)\r",
+                  "pm.test(\"Userlist returned\", () => {\r",
+                  "    pm.expect(response.data).to.be.an('array', 'Response data should be an array');\r",
+                  "    const userlist = response.data;\r",
+                  "    console.log(userlist);\r",
+                  "    const user = userlist.find(user => String(user._id) === String(expectedID));\r",
+                  "    if (!user) {\r",
+                  "        console.log(\"未找到匹配 ID。请检查变量 'userid' 是否等于以下之一：\");\r",
+                  "        console.log(response.data.map(u => u._id)); \r",
+                  "    }\r",
+                  "    console.log(user);\r",
+                  "    pm.expect(user, `User with ID ${expectedID} was not found in the list`).to.be.undefined;\r",
+                  "    // pm.expect(user).to.be.an(\"object\",'Reponse data include the user just created');\r",
+                  "    // pm.expect(user).to.have.property('email');\r",
+                  "    // pm.expect(user.email).to.eql(expectedEmail);\r",
+                  "    // pm.expect(user).to.have.property('_id');\r",
+                  "    // pm.expect(String(user._id)).to.eql(String(expectedID));\r",
+                  "    // pm.expect(user).to.have.property('preferredLanguage');\r",
+                  "    // pm.expect(String(user.preferredLanguage)).to.eql(String(\"cn\"));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/users",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Topics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/topics",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "topics"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get a random topic",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/topics/next",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "topics",
+                "next"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get a specific topic",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/topics/:topicid",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "topics",
+                ":topicid"
+              ],
+              "variable": [
+                {
+                  "id": 0,
+                  "key": "topicid",
+                  "value": "69d08c9c0c22cacef7e0ae3a",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "localhost:5001",
+      "type": "string"
+    }
+  ]
+}

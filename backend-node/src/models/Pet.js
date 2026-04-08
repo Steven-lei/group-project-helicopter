@@ -5,7 +5,7 @@ const PetSchema = new mongoose.Schema(
     petType: {
       type: String,
       required: true,
-      default: "宝可梦 1",
+      default: "pockmon 1",
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,

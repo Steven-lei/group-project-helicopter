@@ -1,0 +1,7 @@
+# Use this workspace to collaborate
+workspace:
+  id: 24872505-0d1a-4cef-8389-6b827a11879a
+
+localResources:
+  collections:
+    - ..\backend-node\tests\moodpal.postman_collection.json
