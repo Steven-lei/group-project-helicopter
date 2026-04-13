@@ -1,12 +1,12 @@
-import dotenv from 'dotenv';
-import { connectDb } from './config/db.js';
-import { createApp } from './app.js';
+import dotenv from "dotenv";
+import { connectDb } from "../config/db.js";
+import { createApp } from "./app.js";
 
 dotenv.config();
 
 const port = Number(process.env.PORT || 5001);
-const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
-const uploadDir = process.env.UPLOAD_DIR || './uploads';
+const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173";
+const uploadDir = process.env.UPLOAD_DIR || "./uploads";
 
 async function start() {
   await connectDb(process.env.MONGODB_URI);
@@ -19,6 +19,6 @@ async function start() {
 }
 
 start().catch((error) => {
-  console.error('Failed to start backend:', error);
+  console.error("Failed to start backend:", error);
   process.exit(1);
 });

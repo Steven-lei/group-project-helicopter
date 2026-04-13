@@ -3,7 +3,7 @@ import cors from "cors";
 import path from "node:path";
 import fs from "node:fs";
 import apiRoutes from "./routes/api.js";
-
+import { whitelist } from "../config/whiltelist.js";
 import {
   errorHandler,
   notFoundHandler,
@@ -15,8 +15,18 @@ export function createApp({ clientOrigin, uploadDir }) {
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
-
-  app.use(cors({ origin: clientOrigin, credentials: true }));
+  console.log("cors allowing from", whitelist);
+  const corsOption = {
+    origin: function (origin, callback) {
+      if (!origin || whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  };
+  app.use(cors(corsOption));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
