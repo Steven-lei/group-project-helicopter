@@ -8,4 +8,4 @@ app.include_router(inference_router)
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "moodpal-ai", "modelLoaded": True}
+    return {"status": "ok", "service": "moodpal-ai", "modelLoaded": True, "version": "1.0.0"}
