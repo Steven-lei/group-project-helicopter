@@ -2,7 +2,9 @@ name: Deploy Backend
 on:
   push:
     branches: [main] # only on main branch
-    paths: ["backend-node/**"]
+    paths:
+      - "backend-node/**"
+      - ".github/workflows/build_backend.yml"
 jobs:
   deploy-backend:
     runs-on: ubuntu-latest

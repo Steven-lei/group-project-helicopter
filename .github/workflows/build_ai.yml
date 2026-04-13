@@ -10,6 +10,7 @@ on:
       - main
     paths:
       - "ai-service-python/**"
+      - ".github/workflows/build_ai.yml"
   workflow_dispatch:
 
 jobs:
